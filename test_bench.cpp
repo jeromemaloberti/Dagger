@@ -1,5 +1,6 @@
 #include <chrono>
 #include <eve/module/algo.hpp>
+#include <functional>
 #include <iostream>
 #include <nanobench.h>
 #include <vector>
@@ -28,7 +29,7 @@ float dot_eve2(const std::vector<float> &l, const std::vector<float> &r) {
 float dot_eve3(const std::vector<float> &l, const std::vector<float> &r) {
   return eve::algo::transform_reduce[eve::algo::fuse_operations](
       eve::views::zip(l, r),
-      [](auto xy, auto sum) { return eve::fma(get<0>(xy) , get<1>(xy), sum); },
+      [](auto xy, auto sum) { return eve::fma(get<0>(xy), get<1>(xy), sum); },
       0.0f);
 }
 
