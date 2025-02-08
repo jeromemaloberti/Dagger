@@ -1,7 +1,8 @@
+#include "catch2/catch_approx.hpp"
+#include "catch2/catch_test_macros.hpp"
 #include <chrono>
 #include <eve/module/algo.hpp>
 #include <functional>
-#include <iostream>
 #include <nanobench.h>
 #include <vector>
 
@@ -33,7 +34,7 @@ float dot_eve3(const std::vector<float> &l, const std::vector<float> &r) {
       0.0f);
 }
 
-void bench(
+void dot_bench(
     const std::string &name,
     std::function<float(const std::vector<float> &, const std::vector<float> &)>
         f) {
@@ -52,9 +53,22 @@ void bench(
   }
 }
 
-int main() {
-  bench("dot", dot);
-  bench("dot_eve", dot_eve);
-  bench("dot_eve2", dot_eve2);
-  bench("dot_eve3", dot_eve3);
+TEST_CASE("dot", "[correctness]") {
+  const int length = 16;
+  std::vector<float> in1(length, 2.4);
+  std::vector<float> in2(length, 4.2);
+  float ref = dot(in1, in2);
+  float ans = dot_eve(in1, in2);
+  REQUIRE(ans == Catch::Approx(ref));
+  ans = dot_eve2(in1, in2);
+  REQUIRE(ans == Catch::Approx(ref));
+  ans = dot_eve3(in1, in2);
+  REQUIRE(ans == Catch::Approx(ref));
+}
+
+TEST_CASE("dot_bench", "[benchmark]") {
+  dot_bench("dot", dot);
+  dot_bench("dot_eve", dot_eve);
+  dot_bench("dot_eve2", dot_eve2);
+  dot_bench("dot_eve3", dot_eve3);
 }

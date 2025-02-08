@@ -39,7 +39,10 @@ add_definitions("-march=native")
 # spdlog::spdlog)
 add_executable(test_bench test_bench.cpp)
 target_link_libraries(test_bench PUBLIC Threads::Threads nanobench eve::eve
-                                        OpenMP::OpenMP_CXX spdlog::spdlog)
+                                        OpenMP::OpenMP_CXX spdlog::spdlog  Catch2::Catch2WithMain)
+add_executable(test test.cpp)
+target_link_libraries(test PUBLIC Threads::Threads nanobench eve::eve
+                                  OpenMP::OpenMP_CXX spdlog::spdlog Catch2::Catch2WithMain)
 add_executable(test_safetensor test_safetensor.cpp)
 target_link_libraries(test_safetensor PUBLIC Threads::Threads
                                              OpenMP::OpenMP_CXX spdlog::spdlog)
